@@ -73,3 +73,23 @@ void Citeste_matricea_din_fisier(ifstream& in_file, int** matrice, int n)
         }
     }
 }
+
+void PrintMemoryInfo(DWORD processID)
+{
+    HANDLE hProcess;
+    PROCESS_MEMORY_COUNTERS_EX pmc;
+    MEMORYSTATUSEX memInfo;
+
+    hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
+        PROCESS_VM_READ,
+        FALSE, processID);
+    if (NULL == hProcess)
+        return;
+
+    if (GetProcessMemoryInfo(hProcess, (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc)))
+    {
+        cout << "PrivateBytes: " << pmc.PrivateUsage << endl;
+    }
+
+    CloseHandle(hProcess);
+}
